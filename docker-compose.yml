@@ -1,12 +1,12 @@
 version: '3'
 networks:
-  web:
-    name: web
+  network:
+    name: network
     ipam:
       config:
         - subnet: 172.16.1.0/24
 services:
-  webserver:
+  web:
     build:
       context: './bin/${PHPVERSION}'
     container_name: '${COMPOSE_PROJECT_NAME}-${PHPVERSION}'
@@ -26,13 +26,13 @@ services:
       - '${LOG_DIR-./logs/apache2}:/var/log/apache2'
       - '${DEVELOPER_HOME_DIR}/.bash_profile:/home/developer/.bash_profile'
     networks:
-      web:
+      network:
         ipv4_address: 172.16.1.101
     environment:
       APACHE_DOCUMENT_ROOT: '${APACHE_DOCUMENT_ROOT-/var/www}'
       PMA_PORT: '${HOST_MACHINE_PMA_PORT}'
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
-      DOCKER_SERVICE_NAME: 'webserver'
+      DOCKER_SERVICE_NAME: 'web'
     extra_hosts:
       - host.docker.internal:host-gateway  
   database:
@@ -43,7 +43,7 @@ services:
     ports:
       - '127.0.0.1:${HOST_MACHINE_MYSQL_PORT}:3306'
     networks:
-      web: null
+      network: null
     volumes:
       - '${MYSQL_INITDB_DIR-./config/initdb}:/docker-entrypoint-initdb.d'
       - '${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql'
@@ -59,7 +59,7 @@ services:
     links:
       - database
     networks:
-      web: null
+      network: null
     environment:
       PMA_HOST: database
       PMA_PORT: 3306
@@ -81,7 +81,7 @@ services:
     ports:
       - '127.0.0.1:${HOST_MACHINE_REDIS_PORT}:6379'
     networks:
-      web: null
+      network: null
   dnsmasq:
     image: strm/dnsmasq
     container_name: dns
@@ -93,5 +93,5 @@ services:
     cap_add:
       - NET_ADMIN
     networks:
-      web:
+      network:
         ipv4_address: 172.16.1.100
