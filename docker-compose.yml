@@ -84,15 +84,15 @@ services:
       network: null
   mailhog:
     image: mailhog/mailhog
-    container_name: 'mailhog'
+    container_name: '${COMPOSE_PROJECT_NAME}-mailhog'
     ports:
       - "1025:1025"
-      - "8025:8025"
+      - '8025:${HOST_MACHINE_MAILHOG_PORT}'
     networks:
       network: null
   dnsmasq:
     image: strm/dnsmasq
-    container_name: dns
+    container_name: '${COMPOSE_PROJECT_NAME}-dns'
     hostname: dnsmasq
     volumes:
       - './config/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf'
