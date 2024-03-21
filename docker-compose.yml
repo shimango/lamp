@@ -39,6 +39,7 @@ services:
     build:
       context: './bin/${DATABASE}'
     container_name: '${COMPOSE_PROJECT_NAME}-${DATABASE}'
+    command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
       - '127.0.0.1:${HOST_MACHINE_MYSQL_PORT}:3306'
