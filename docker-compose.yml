@@ -39,16 +39,15 @@ services:
     build:
       context: './bin/${DATABASE}'
     container_name: '${COMPOSE_PROJECT_NAME}-${DATABASE}'
-    command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
       - '127.0.0.1:${HOST_MACHINE_MYSQL_PORT}:3306'
     networks:
-      network: null
+      network:
     volumes:
-      - '${MYSQL_INITDB_DIR-./config/initdb}:/docker-entrypoint-initdb.d'
-      - '${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql'
-      - '${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql'
+      - '${MYSQL_INITDB_DIR}:/docker-entrypoint-initdb.d'
+      - '${MYSQL_DATA_DIR}:/var/lib/mysql'
+      - '${MYSQL_LOG_DIR}:/var/log/mysql'
     environment:
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
       MYSQL_DATABASE: '${MYSQL_DATABASE}'
@@ -61,7 +60,7 @@ services:
     links:
       - database
     networks:
-      network: null
+      network:
     environment:
       PMA_HOST: database
       PMA_PORT: 3306
@@ -83,7 +82,7 @@ services:
     ports:
       - '127.0.0.1:${HOST_MACHINE_REDIS_PORT}:6379'
     networks:
-      network: null
+      network:
   mailhog:
     image: mailhog/mailhog
     container_name: '${COMPOSE_PROJECT_NAME}-mailhog'
@@ -91,7 +90,7 @@ services:
       - "1025:1025"
       - '8025:${HOST_MACHINE_MAILHOG_PORT}'
     networks:
-      network: null
+      network:
   dnsmasq:
     image: strm/dnsmasq
     container_name: '${COMPOSE_PROJECT_NAME}-dns'

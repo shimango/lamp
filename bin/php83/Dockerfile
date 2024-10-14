@@ -102,4 +102,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
 
 RUN apt-get -y update && \
     apt-get -y --no-install-recommends install vim
+
+#RUN docker-php-ext-install opcache
+RUN rm -rf /usr/src/php/ext/imagick    
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
